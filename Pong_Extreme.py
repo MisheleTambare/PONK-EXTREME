@@ -5,6 +5,7 @@ import os
 
 # Inicializar Pygame
 pygame.init()
+pygame.mixer.init()
 
 # Dimensiones de la pantalla
 ANCHO, ALTO = 1200, 650
@@ -31,16 +32,19 @@ fondo2_path = os.path.join("fondos", "fondo_instrucciones.png")
 fondo2 = pygame.image.load(fondo2_path)
 fondo2 = pygame.transform.scale(fondo2, (ANCHO, ALTO))
 
+# Agregar Música
+pygame.mixer.music.load(os.path.join("fondos", "audio.mpeg"))
+
 # Tamaño de la raqueta y velocidad
 RAQUETA_ANCHO, RAQUETA_ALTO = 20, 100
-VELOCIDAD_RAQUETA = 10
+VELOCIDAD_RAQUETA = 15
 
 # Tamaño de la pelota y velocidad
 PELOTA_DIAMETRO = 30
 PELOTA_DIAMETRO_B = 50
-VELOCIDAD_PELOTA_INICIAL = 5
-AUMENTO_VELOCIDAD_TIEMPO = 15
-AUMENTO_VELOCIDAD_FACTOR = 1.3
+VELOCIDAD_PELOTA_INICIAL = 8
+AUMENTO_VELOCIDAD_TIEMPO = 5
+AUMENTO_VELOCIDAD_FACTOR = 1.5
 
 # Inicializar posiciones y velocidades
 raqueta1_y = ALTO // 2 - RAQUETA_ALTO // 2
@@ -165,7 +169,7 @@ def pantalla_instrucciones():
         reglas_juego2 = ("- El juego es para 2 jugadores, con el Jugador 1 controlando su rectángulo con las teclas W y S, y el Jugador 2 ")
         reglas_juego3 = ("utilizando las flechas de arriba y abajo del teclado.")
         reglas_juego4 = ("- Gana el primer jugador que alcance los 10 puntos.")
-        reglas_juego5 = ("- La velocidad de la pelota aumenta cada 15 segundos, intensificando la emoción del juego.")
+        reglas_juego5 = ("- La velocidad de la pelota aumenta cada 5 segundos, intensificando la emoción del juego.")
         reglas_juego6 = ("- Si un jugador deja pasar la bola, la velocidad vuelve a ser la inicial")
         texto_reglas1 = fuente_mediana.render(reglas_juego1, True, BLANCO)
         PANTALLA.blit(texto_reglas1, (425, 280))
@@ -191,9 +195,12 @@ def pantalla_instrucciones():
 def juego():
     global raqueta1_y, raqueta2_y, pelotas, puntaje_jugador1, puntaje_jugador2, temporizador, mostrar_mensaje, mostrar_bienvenida
 
+    pygame.mixer.music.play(-1)
+
     while True:
         for evento in pygame.event.get():
             if evento.type == pygame.QUIT:
+                pygame.mixer.music.stop()
                 pygame.quit()
                 sys.exit()
 
